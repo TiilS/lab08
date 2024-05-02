@@ -2,8 +2,8 @@
 #include <string>
 
 int main(){
-    string name;
-    cin >> name;
-    cout << "Hello world from " << name << std::endl;
+    std::string name; // name
+    std::cin >> name; // input
+    std::cout << "Hello world from " << name << std::endl; // output
     return 0;
 }
