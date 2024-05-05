@@ -7,12 +7,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-	run: cmake -H. -B_build 
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
           path: /Users/main/TiilS/workspace/projects/lab04 
           key: ${{ runner.os }}-dependencies-${{ hashFiles('**/lockfiles') }}
-	run: cmake --build _build
       - name: Test project
         run: ./.github/workflows/test.sh
