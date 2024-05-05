@@ -1,17 +1,13 @@
-name: action
+
+name: tp-lab-actions
+run-name: TiilS is running TPLab04
 on: [push]
 jobs:
   container-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: /Users/main/TiilS/workspace/projects/lab04
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/lockfiles') }}
+      - uses: actions/checkout@v4
       - name: Test project
-	run: cmake -H. -B_build
+	run: cmake -H. -B_build 
 	run: cmake --build _build
         run: ./.github/workflows/test.sh
