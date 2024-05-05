@@ -12,4 +12,6 @@ jobs:
           path: /Users/main/TiilS/workspace/projects/lab04
           key: ${{ runner.os }}-dependencies-${{ hashFiles('**/lockfiles') }}
       - name: Test project
+	run: cmake -H. -B_build
+	run: cmake --build _build
         run: ./.github/workflows/test.sh
