@@ -1,28 +1,27 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.22)
+
+project(solver)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(BUILD_TESTS "Build tests" OFF)
 
-if(BUILD_TESTS)                   
-  add_compile_options(--coverage) 
-endif()
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/formatter_ex_lib formatter_ex_lib_dir)
 
-project (banking)
+add_library(solver_lib ${CMAKE_CURRENT_SOURCE_DIR}/solver_lib/solver.cpp)
+add_executable(solver ${CMAKE_CURRENT_SOURCE_DIR}/solver_application/equation.cpp)
 
-add_library(banking STATIC ${CMAKE_CURRENT_SOURCE_DIR}/banking/Transaction.cpp ${CMAKE_CURRENT_SOURCE_DIR}/banking/Account.cpp)
-target_include_directories(banking PUBLIC
-${CMAKE_CURRENT_SOURCE_DIR}/banking )
+target_include_directories(formatter_ex_lib PUBLIC
+${CMAKE_CURRENT_SOURCE_DIR}/formatter_lib
+${CMAKE_CURRENT_SOURCE_DIR}/formatter_ex_lib
+${CMAKE_CURRENT_SOURCE_DIR}/solver_lib
+)
 
-target_link_libraries(banking gcov)
+target_link_libraries(solver formatter_ex_lib formatter_lib solver_lib)
 
-if(BUILD_TESTS)
-  enable_testing()
-  add_subdirectory(third-party/gtest)
-  file(GLOB BANKING_TEST_SOURCES tests/*.cpp)
-  add_executable(check ${BANKING_TEST_SOURCES})
-  target_link_libraries(check banking gtest_main)
-  add_test(NAME check COMMAND check)
-endif()
-include(CPackConfig.cmake)
+# Инструкции для инсталляции
+install(TARGETS solver
+    RUNTIME DESTINATION bin
+)
+
+include(CPack.cmake)
