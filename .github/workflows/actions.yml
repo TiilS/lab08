@@ -1,21 +1,21 @@
-name: CPack
+name: Build and Run Docker
 
-on:
- push:
-  branches: [master]
- pull_request:
-  branches: [master]
+on: [push]
 
-jobs: 
- build_Linux:
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-  runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-  steps:
-  - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t message-writer .
 
-  - name: Configure Solver
-    run: cmake ${{github.workspace}} -B ${{github.workspace}}/build
+    - name: Run Docker container
+      run: docker run --name message-writer-container message-writer
 
-  - name: Build Solver
-    run: cmake --build ${{github.workspace}}/build
+    - name: Check output file
+      run: docker exec message-writer-container cat /usr/src/app/output.txt
+
